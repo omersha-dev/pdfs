@@ -1,0 +1,23 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "description": "Printing and converting data to PDF service developed by Omer Sha'ashua. This is ther server side of the project.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Omer Sha'ashua",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1",
+    "html-pdf-node": "^1.0.7",
+    "mongodb": "^3.6.5",
+    "path": "^0.12.7",
+    "pdf-to-base64": "^1.0.3",
+    "pdf2html": "^2.5.2",
+    "pdfkit": "^0.11.0",
+    "request": "^2.88.2",
+    "ws": "^7.4.4"
+  }
+}
