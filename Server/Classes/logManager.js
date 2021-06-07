@@ -1,4 +1,5 @@
 const fs = require("fs");
+const path = require("path");
 
 class PrivateLogManager {
 
@@ -10,7 +11,7 @@ class PrivateLogManager {
     // Gets all the orders from the JSON file once the program is started.
     // If it is empty, return an empty object.
     initOrdersLog() {
-        var unsentPdfsJson = fs.readFileSync(this.filename);
+        var unsentPdfsJson = fs.readFileSync(path.resolve(__dirname, `../${this.filename}`));
         if (unsentPdfsJson.length > 0) {
             return JSON.parse(unsentPdfsJson);
         } else {
