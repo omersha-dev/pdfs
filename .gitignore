@@ -1,0 +1,25 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+/printers-front - Copy/node_modules
+/printers-front - Copy/.pnp
+/printers-front - Copy.pnp.js
+
+# testing
+/printers-front - Copy/coverage
+
+# production
+/printers-front - Copy/build
+
+# misc
+/printers-front - Copy.DS_Store
+/printers-front - Copy.env.local
+/printers-front - Copy.env.development.local
+/printers-front - Copy.env.test.local
+/printers-front - Copy.env.production.local
+
+/printers-front - Copy/npm-debug.log*
+/printers-front - Copy/yarn-debug.log*
+/printers-front - Copy/yarn-error.log*
+
+/Server/node_modules
