@@ -1,5 +1,5 @@
 const MongoClient = require("mongodb").MongoClient;
-const url = "mongodb://3.67.198.65:27017/";
+const url = "mongodb://localhost:27017/";
 
 // MongoClient.connect(url, (err, db) => {
 //     if (err) throw err;
@@ -11,7 +11,7 @@ const url = "mongodb://3.67.198.65:27017/";
 class PrivateDbManager {
 
     constructor() {
-        this.url = "mongodb://3.67.198.65:27017/";
+        this.url = "mongodb://localhost:27017/";
         this.initConnection();
     }
 
