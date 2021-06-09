@@ -219,6 +219,6 @@ function validateCredentials(req, res, shouldCheckWebsite=false) {
     }
 }
 
-app.listen(80, "0.0.0.0", () => {
+app.listen(80, () => {
     console.log("Listening on port 80");
 });
