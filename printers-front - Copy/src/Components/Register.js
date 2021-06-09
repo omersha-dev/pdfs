@@ -40,7 +40,7 @@ export default function Register() {
 
         var config = {
             method: "POST",
-            url: 'http://3.67.198.65/api/users/register',
+            url: 'http://localhost/api/users/register',
             // url: 'http://18.156.5.104/api/users/register',
             headers: { },
             data : data
