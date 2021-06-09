@@ -25,7 +25,7 @@ class Account extends React.Component {
     getUserDetails() {
         var config = {
             method: "POST",
-            url: `http://localhost/api/users/${cookie.get("website")}`,
+            url: `http://3.67.198.65/api/users/${cookie.get("website")}`,
             headers: { },
         }
 

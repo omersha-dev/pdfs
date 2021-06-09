@@ -33,6 +33,7 @@ var corsMiddleware = function(req, res, next) {
 app.use(corsMiddleware);
 
 app.get('/', (req, res) => {
+    console.log("New access");
     res.sendFile(path.join(__dirname, '../printers-front - Copy/build/index.html'));
 });
 
@@ -218,6 +219,6 @@ function validateCredentials(req, res, shouldCheckWebsite=false) {
     }
 }
 
-app.listen(80, () => {
+app.listen(80, "localhost", () => {
     console.log("Listening on port 80");
 });
