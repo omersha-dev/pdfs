@@ -17,7 +17,7 @@ export default function Login(props) {
         
         var config = {
             method: "POST",
-            url: "http://localhost/api/users/login",
+            url: "http://3.68.66.32/api/users/login",
             headers: { },
             data: data
         };

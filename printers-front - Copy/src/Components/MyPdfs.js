@@ -14,7 +14,7 @@ class MyPdfs extends React.Component {
         var self = this;
         var config = {
             method: 'get',
-            url: `http://localhost/api/pdfs/${this.props.website}`,
+            url: `http://3.68.66.32/api/pdfs/${this.props.website}`,
             headers: { }
         };
         
