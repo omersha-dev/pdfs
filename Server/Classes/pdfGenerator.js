@@ -16,12 +16,12 @@ class PdfManager {
             } else {
                 file = { content: htmlData.data.html };
             }
+            console.log(`pdf/${htmlData.website}`);
             if (!fs.existsSync(`pdf/${htmlData.website}`)) {
                 fs.mkdirSync(`pdf/${htmlData.website}`);
             }
             html2pdf.generatePdf(file, options)
                 .then(pdfBuffer => {
-                    console.log(`pdf/${htmlData.website}`);
                     if ( !fs.existsSync(`pdf/${htmlData.website}`) ) {
                         fs.mkdir(`pdf/${htmlData.website}`, {recursive: true}, err => {})
                     }
