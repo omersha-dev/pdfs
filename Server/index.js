@@ -20,7 +20,7 @@ const path = require("path");
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, "../printers-front - Copy/build")));
 console.log(__dirname);
-app.use("/pdf", express.static(path.join(__dirname, "pdf")));
+app.use("/pdf", express.static(path.join(__dirname, "Server/pdf")));
 
 //CORS middleware
 var corsMiddleware = function(req, res, next) {
