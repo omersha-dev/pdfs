@@ -33,7 +33,7 @@ class Dashboard extends React.Component {
         var self = this;
         var config = {
             method: 'get',
-            url: `http://3.66.248.51/api/pdfs/${cookie.get("website")}`,
+            url: `http://pdfeast.com/api/pdfs/${cookie.get("website")}`,
             headers: { }
         };
         
