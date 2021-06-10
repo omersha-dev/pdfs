@@ -36,6 +36,8 @@ app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, '../printers-front - Copy/build/index.html'));
 });
 
+app.use(express.static('pdf'));
+
 app.get('/api', (req, res) => {
     res.setHeader("Content-disposition", "attachment; filename=" + req.query.filename);
     res.setHeader("Content-type", "application/pdf");
