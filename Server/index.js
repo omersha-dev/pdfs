@@ -19,8 +19,7 @@ const path = require("path");
 
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, "../printers-front - Copy/build")));
-console.log(__dirname);
-app.use("/pdf", express.static(path.join(__dirname, "Server/pdf")));
+app.use("/pdf", express.static(path.join(__dirname, "pdf")));
 
 //CORS middleware
 var corsMiddleware = function(req, res, next) {
@@ -36,7 +35,6 @@ app.use(corsMiddleware);
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, '../printers-front - Copy/build/index.html'));
 });
-
 
 app.get('/api', (req, res) => {
     res.setHeader("Content-disposition", "attachment; filename=" + req.query.filename);

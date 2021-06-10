@@ -86,7 +86,7 @@ class MyPdfs extends React.Component {
                             </ListGroup>
                         </Col>
                         <Col lg={10}>
-                            <iframe title={this.state.currentPdf} src={"pdfeast.com/pdf/" + this.props.website + '/' + this.state.currentPdf} style={{width: "98%", height: "100%", border: "none"}}/>
+                            <iframe title={this.state.currentPdf} src={"http://localhost/pdf/" + this.props.website + '/' + this.state.currentPdf} style={{width: "98%", height: "100%", border: "none"}}/>
                         </Col>
                     </Row>
                 // </Container>
