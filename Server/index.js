@@ -22,8 +22,8 @@ app.use(express.static(path.join(__dirname, "../printers-front - Copy/build")));
 app.use("/pdf/*", express.static(path.join(__dirname, "pdf")));
 
 app.get("/pdf/*", (req, res) => {
-    console.log(path.join(__dirname, req.url));
-    res.sendFile(path.join(__dirname, req.url));
+    console.log(req.url);
+    res.sendFile(req.url);
     // res.sendStatus(200);
 })
 
