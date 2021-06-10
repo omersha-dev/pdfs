@@ -16,9 +16,9 @@ class PdfManager {
             } else {
                 file = { content: htmlData.data.html };
             }
-            if (!fs.existsSync(`pdf/${htmlData.website}`)) {
-                console.log(`pdf/${htmlData.website}`);
-                fs.mkdirSync(`pdf/${htmlData.website}`);
+            if (!fs.existsSync(`/var/app/pdfs/Server/pdf/${htmlData.website}`)) {
+                fs.mkdirSync(`/var/app/pdfs/Server/pdf/${htmlData.website}`);
+                console.log(`/var/app/pdfs/Server/pdf/${htmlData.website} has been created`);
             }
             html2pdf.generatePdf(file, options)
                 .then(pdfBuffer => {
@@ -31,6 +31,7 @@ class PdfManager {
                 })
         }
     }
+    
 
     // Checks if the logo is already downloaded.
     // If it is not, downloads it and only THEN continues.
