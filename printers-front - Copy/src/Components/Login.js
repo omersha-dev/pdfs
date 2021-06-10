@@ -17,7 +17,7 @@ export default function Login(props) {
         
         var config = {
             method: "POST",
-            url: "/api/users/login",
+            url: "http://pdfeast.com/api/users/login",
             headers: { },
             data: data
         };
