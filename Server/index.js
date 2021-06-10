@@ -22,9 +22,12 @@ app.use(express.static(path.join(__dirname, "../printers-front - Copy/build")));
 app.use("/pdf/*", express.static(path.join(__dirname, "pdf")));
 
 app.get("/pdf/*", (req, res) => {
-    console.log(req.url);
-    res.sendFile(req.url);
-    // res.sendStatus(200);
+    var file = fs.createReadStream("Server/pdf/problemsolver.co.il/asdfasdf.pdf");
+    var stat = fs.statSync("Server/pdf/problemsolver.co.il/asdfasdf.pdf");
+    res.setHeader('Content-Length', stat.size);
+    res.setHeader('Content-Type', 'application/pdf');
+    // res.setHeader('Content-Disposition', 'attachment; filename=quote.pdf');
+    file.pipe(res);
 })
 
 //CORS middleware
