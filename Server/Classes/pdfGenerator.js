@@ -21,6 +21,7 @@ class PdfManager {
             }
             html2pdf.generatePdf(file, options)
                 .then(pdfBuffer => {
+                    console.log(`pdf/${htmlData.website}`);
                     if ( !fs.existsSync(`pdf/${htmlData.website}`) ) {
                         fs.mkdir(`pdf/${htmlData.website}`, {recursive: true}, err => {})
                     }
