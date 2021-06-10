@@ -16,8 +16,8 @@ class PdfManager {
             } else {
                 file = { content: htmlData.data.html };
             }
-            console.log(`pdf/${htmlData.website}`);
             if (!fs.existsSync(`pdf/${htmlData.website}`)) {
+                console.log(`pdf/${htmlData.website}`);
                 fs.mkdirSync(`pdf/${htmlData.website}`);
             }
             html2pdf.generatePdf(file, options)
