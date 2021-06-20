@@ -2,7 +2,7 @@
 import React from "react";
 import Cookie from 'universal-cookie';
 import {
-    BrowserRouter as Router,
+    HashRouter as Router,
     Switch,
     Route,
     Link,

@@ -19,16 +19,16 @@ const path = require("path");
 
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, "../printers-front - Copy/build")));
-app.use("/pdf/*", express.static(path.join(__dirname, "pdf")));
+app.use(express.static('public/pdf'))
 
-app.get("/pdf/*", (req, res) => {
-    var file = fs.createReadStream("Server/pdf/problemsolver.co.il/asdfasdf.pdf");
-    var stat = fs.statSync("Server/pdf/problemsolver.co.il/asdfasdf.pdf");
-    res.setHeader('Content-Length', stat.size);
-    res.setHeader('Content-Type', 'application/pdf');
-    // res.setHeader('Content-Disposition', 'attachment; filename=quote.pdf');
-    file.pipe(res);
-})
+// app.get("/pdf/*", (req, res) => {
+//     var file = fs.createReadStream(`Server/pdf/${req.params[0]}`);
+//     var stat = fs.statSync(`Server/pdf/${req.params[0]}`);
+//     res.setHeader('Content-Length', stat.size);
+//     res.setHeader('Content-Type', 'application/pdf');
+//     res.setHeader('Content-Disposition', 'attachment; filename=quote.pdf');
+//     file.pipe(res);
+// })
 
 //CORS middleware
 var corsMiddleware = function(req, res, next) {
@@ -120,6 +120,11 @@ app.post('/api/users/register', (req, res) => {
     dbManager.dbRegisterUser(req.body)
         .then(registerStatus => {
             if (registerStatus) {
+                console.log(req.body);
+                if (!fs.existsSync(path.resolve(__dirname, `pdf/${req.body.website}`))) {
+                    fs.mkdirSync(path.resolve(__dirname, `pdf/${req.body.website}`));
+                    console.log(`pdf/${req.body.website} has been created`);
+                }
                 res.sendStatus(200);
             } else {
                 res.status(404).send({success: false, error: {message: "This email or website already exists"}});

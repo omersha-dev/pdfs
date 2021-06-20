@@ -3,6 +3,7 @@ const fs = require("fs");
 const request = require("request");
 // const pdf2html = require("pdf2html");
 const html2pdf = require("html-pdf-node");
+const path = require("path");
 
 class PdfManager {
 
@@ -16,16 +17,18 @@ class PdfManager {
             } else {
                 file = { content: htmlData.data.html };
             }
-            if (!fs.existsSync(`/var/app/pdfs/Server/pdf/${htmlData.website}`)) {
-                fs.mkdirSync(`/var/app/pdfs/Server/pdf/${htmlData.website}`);
-                console.log(`/var/app/pdfs/Server/pdf/${htmlData.website} has been created`);
-            }
+            // if (!fs.existsSync(`/var/app/pdfs/Server/pdf/${htmlData.website}`)) {
+            //     fs.mkdirSync(`/var/app/pdfs/Server/pdf/${htmlData.website}`);
+            //     console.log(`/var/app/pdfs/Server/pdf/${htmlData.website} has been created`);
+            // }
+            // console.log("Continued");
+            console.log(`pdf/${htmlData.website}/${htmlData.data.filename}.pdf`);
             html2pdf.generatePdf(file, options)
                 .then(pdfBuffer => {
                     if ( !fs.existsSync(`pdf/${htmlData.website}`) ) {
                         fs.mkdir(`pdf/${htmlData.website}`, {recursive: true}, err => {})
                     }
-                    fs.writeFileSync(`pdf/${htmlData.website}/${htmlData.data.filename}.pdf`, pdfBuffer, {encoding: "binary", flag: 'w'});
+                    fs.writeFileSync(path.resolve(__dirname, `../pdf/${htmlData.website}/${htmlData.data.filename}.pdf`), pdfBuffer, {encoding: "binary", flag: 'w'});
                     console.log("done");
                     callback();
                 })
