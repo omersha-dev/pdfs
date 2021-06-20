@@ -15,20 +15,21 @@ const eventManager = EventManger.getInstance();
 const dbManager = DbManager.getInstance();
 
 const path = require("path");
+const { response } = require("express");
 // const __dirname = path.resolve();
 
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, "../printers-front - Copy/build")));
-app.use(express.static('public/pdf'))
+app.use(express.static(path.join(__dirname, "pdf/*")));
+app.use('/pdf', (req, res) => {
+    var test = req.path.replace(/\/\s*$/, "");
+    fs.readFile(path.join(__dirname, `pdf${test}`), (err, data) => {
+        res.contentType("application/pdf");
+        res.send(data);
+    });
+});
 
-// app.get("/pdf/*", (req, res) => {
-//     var file = fs.createReadStream(`Server/pdf/${req.params[0]}`);
-//     var stat = fs.statSync(`Server/pdf/${req.params[0]}`);
-//     res.setHeader('Content-Length', stat.size);
-//     res.setHeader('Content-Type', 'application/pdf');
-//     res.setHeader('Content-Disposition', 'attachment; filename=quote.pdf');
-//     file.pipe(res);
-// })
+app.use(express.static('public/pdf'))
 
 //CORS middleware
 var corsMiddleware = function(req, res, next) {
