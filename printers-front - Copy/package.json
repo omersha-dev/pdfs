@@ -15,6 +15,7 @@
     "react-bootstrap": "^1.5.2",
     "react-dom": "^17.0.2",
     "react-hook-form": "^6.15.5",
+    "react-icons": "^4.2.0",
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.3",
     "universal-cookie": "^4.0.4",
@@ -24,6 +25,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
+    "watch": "npm-watch",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
@@ -44,5 +46,16 @@
       "last 1 safari version"
     ]
   },
-  "proxy": "http://localhost:80"
+  "watch": {
+    "build": {
+      "patterns": [
+        "src"
+      ],
+      "extensions": "js,jsx"
+    }
+  },
+  "proxy": "http://localhost:80/api",
+  "devDependencies": {
+    "npm-watch": "^0.10.0"
+  }
 }

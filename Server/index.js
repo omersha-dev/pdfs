@@ -26,7 +26,6 @@ app.use('/pdf', (req, res) => {
     fs.readFile(path.join(__dirname, `pdf${test}`), (err, data) => {
         res.contentType("application/pdf");
         res.send(data);
-        // console.log("ASDF");
     });
 });
 

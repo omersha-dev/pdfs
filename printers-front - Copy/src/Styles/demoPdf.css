@@ -1,0 +1,147 @@
+.section01 > * {
+    text-align:center;
+}
+
+.demoPdfContainer {
+    border-radius: 5px;
+    -o-border-radius: 5px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+}
+
+.demoPdf {
+    background-color: rgb(61, 61, 61);
+}
+
+.programBar {
+    padding-left: 10px;
+    border-radius: 5px 5px 0 0;
+    -o-border-radius: 5px 5px 0 0;
+    -moz-border-radius: 5px 5px 0 0;
+    -webkit-border-radius: 5px 5px 0 0;
+    background-color: rgb(0, 0, 0);
+}
+
+.barIcon {
+    margin-right: 3px;
+    color: rgb(255, 255, 255);
+}
+
+.barTitle {
+    color:rgb(255, 255, 255);
+}
+
+.programBar > div, .systemBar {
+    padding: 0;
+    margin: 0;
+}
+
+.demoPdfSystem {
+    color:rgb(255, 255, 255);
+    padding: 20px 10px 20px 10px;
+}
+
+.demoPdfSystem:hover, .windowControl:hover {
+    background-color: rgb(80, 80, 80);
+}
+
+.windowControlContainer {
+    text-align: right;
+}
+
+.windowControl {
+    padding: 0 3px;
+    color:rgb(255, 255, 255);
+}
+
+.demoPdfTabContainer {
+    padding: 5px 0 0 0;
+    /* border-bottom: 1px solid rgb(0, 0, 0); */
+}
+
+.demoPdfTab {
+    padding: 0;
+    color:rgb(255, 255, 255);
+}
+
+.demoPdfFileName {
+    margin-right: 10px;
+}
+
+.demoPdfTabInner {
+    color: #fff;
+}
+
+.demoPdfTab > a:hover {
+    text-decoration: none;
+}
+
+.demoPdfActions {
+    margin: 0 3px;
+}
+
+.demoPdfTabInner {
+    padding: 10px 15px;
+    text-align: center;
+}
+
+.demoPdfTab:not(.active) {
+    border-bottom: 1px solid rgb(0, 0, 0);
+}
+
+.demoPdfTabInner.active {
+    background-color: rgb(100, 100, 100);
+    border: 1px solid rgb(0, 0, 0);
+    border-bottom: initial;
+}
+
+.actionsAndNavs {
+    background-color: rgb(100, 100, 100);
+    color:rgb(255, 255, 255);
+}
+
+.demoPdfNavContainer {
+    text-align: center;
+}
+
+.demoPdfNav {
+    margin: 0 3px;
+}
+
+.pageViewContainer {
+    height: 55vh;
+    border-radius: 0 0 5px 5px;
+    -o-border-radius: 0 0 5px 5px;
+    -moz-border-radius: 0 0 5px 5px;
+    -webkit-border-radius: 0 0 5px 5px;
+}
+
+.pdfPageSide:first-child {
+    border-radius: 0 0 0 5px;
+    -o-border-radius: 0 0 0 5px;
+    -moz-border-radius: 0 0 0 5px;
+    -webkit-border-radius: 0 0 0 5px;
+}
+
+.pdfPageSide:last-child {
+    border-radius: 0 0 5px 0;
+    -o-border-radius: 0 0 5px 0;
+    -moz-border-radius: 0 0 5px 0;
+    -webkit-border-radius: 0 0 5px 0;
+}
+
+.pdfPageSide {
+    background-color: rgb(43, 43, 43);
+}
+
+.pageContainer {
+    padding: 7% 0 0 0;
+    background-color: rgb(61, 61, 61);
+}
+
+.pdfPage {
+    background-color: rgb(255, 255, 255);
+    border: 1px solid black;
+    height: 50vh;
+    padding: 5% 5%;
+}

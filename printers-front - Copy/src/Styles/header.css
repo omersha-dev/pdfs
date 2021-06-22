@@ -1,0 +1,17 @@
+.header {
+    background-color: #fff;
+}
+
+.navBtn {
+    /* padding-right: 15px; */
+    color: #fff;
+}
+
+.navBtn:hover {
+    text-decoration: none;
+    color: #fff;
+}
+
+.systemBarContainer {
+    padding: 10px 0;
+}
