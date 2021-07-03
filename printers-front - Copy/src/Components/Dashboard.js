@@ -4,9 +4,7 @@ import { BrowserRouter as Router, Route } from "react-router-dom";
 import {
     Row,
     Col,
-    // CardDeck,
-    // Card,
-    // Container
+    Container
 } from "react-bootstrap"
 import moment from "moment";
 // import DashboardNav from "./DashboardNav";
@@ -14,6 +12,7 @@ import Statistics from "./Statistics";
 import MyPdfs from "./MyPdfs";
 import Account from "./Account";
 import Cookie from "universal-cookie";
+import ManageAccounts from "./ManageAccounts";
 
 const cookie = new Cookie();
 const path = window.location.protocol + '//' + window.location.host.replace(":3000", "");
@@ -164,25 +163,30 @@ class Dashboard extends React.Component {
     // Continue MainView
     render() {
         return (
-            <Row>
-                {/* <Col lg={2}>
-                    <DashboardNav />
-                </Col> */}
-                <Col>
-                    <Router>
-                        <Route
-                            path="/dashboard"
-                            render={({ match: { url } }) => (
-                                <>
-                                    <Route path={`${url}/`} component={Statistics} exact />
-                                    <Route path={`${url}/my-account`} component={Account} />
-                                    <Route path={`${url}/mypdfs`} component={MyPdfs} />
-                                </>
-                            )}
-                        />
-                    </Router>
-                </Col>
-            </Row>
+            <Container fluid>
+                <Row>
+                    {/* <Col lg={2}>
+                        <DashboardNav />
+                    </Col> */}
+                    <Col>
+                        <Router>
+                            <Route
+                                path="/dashboard"
+                                render={({ match: { url } }) => (
+                                    <>
+                                        <Route path={`${url}/`} component={Statistics} exact />
+                                        <Route path={`${url}/my-account`} component={Account} />
+                                        <Route path={`${url}/accounts`} component={ManageAccounts} />
+                                        <Route path={`${url}/mypdfs`} >
+                                            <MyPdfs brand={this.props.brand ? this.props.brand : null} />
+                                        </Route>
+                                    </>
+                                )}
+                            />
+                        </Router>
+                    </Col>
+                </Row>
+            </Container>
             );
         }
         

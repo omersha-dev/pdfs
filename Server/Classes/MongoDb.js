@@ -125,6 +125,19 @@ class PrivateDbManager {
         })
     }
 
+    dbFindUserByArgs(args) {
+        return new Promise((resolve, reject) => {
+            this.dbFindUser(this.buildFilter(args))
+                .then(res => {
+                    resolve(res);
+                })
+                .catch(err => {
+                    console.log(err);
+                    reject(err);
+                })
+        })
+    }
+
     dbRegisterUser(args) {
         return new Promise((resolve, reject) => {
             this.dbFindUser(this.buildFilter({email: args.email, brand: args.brand}, "or"))

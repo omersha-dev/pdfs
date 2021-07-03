@@ -13,30 +13,33 @@ class MyPdfs extends React.Component {
             displayPdfs: null,
             currentPdf: null
         }
-        var self = this;
+        this.getPdfs();
+    }
+
+    getPdfs() {
         var config = {
             method: 'get',
-            url: `${path}/api/pdfs/${this.props.website}`,
+            url: `${path}/api/pdfs/${this.props.brand}`,
             headers: { }
         };
         
         axios(config)
-        .then((response) => {
-            if (!response.data.pdfs.length) {
-                self.setState({ doneLoading: true });
-                return;
-            }
-            var pdfs = response.data.pdfs.reverse();
-            self.setState({
-                doneLoading: true,
-                pdfs: pdfs,
-                displayPdfs: pdfs,
-                currentPdf: pdfs["0"].filename
+            .then((response) => {
+                if (!response.data.pdfs.length) {
+                    this.setState({ doneLoading: true });
+                    return;
+                }
+                var pdfs = response.data.pdfs.reverse();
+                this.setState({
+                    doneLoading: true,
+                    pdfs: pdfs,
+                    displayPdfs: pdfs,
+                    currentPdf: pdfs["0"].filename
+                });
+            })
+            .catch((error) => {
+                console.log(error);
             });
-        })
-        .catch((error) => {
-            console.log(error);
-        });
 
         this.search = this.search.bind(this);
         this.changePdf = this.changePdf.bind(this);
@@ -61,37 +64,36 @@ class MyPdfs extends React.Component {
     }
 
     render() {
+        this.getPdfs();
         if (this.state.doneLoading && this.state.pdfs) {
             return(
-                // <Container fluid>
-                    <Row>
-                        <Col lg={2}>
-                            <Form>
-                                <Form.Control size="lg" type="text" placeholder="Pdf name" onChange={this.search} />
-                            </Form>
-                            <ListGroup style={{height: "550px", overflowY: "scroll"}}>
-                                {this.state.displayPdfs.map((pdf, index) => {
-                                    return(
-                                        <ListGroup.Item
-                                            action
-                                            key={pdf}
-                                            variant="light"
-                                            style={{
-                                                textAlign: "center",
-                                                cursor: "pointer"
-                                            }}
-                                            onClick={this.changePdf}
-                                            value={pdf.filename}
-                                        >{pdf.filename}</ListGroup.Item>
-                                    );
-                                })}
-                            </ListGroup>
-                        </Col>
-                        <Col lg={10}>
-                            <iframe title={this.state.currentPdf} src={"/pdf/" + this.props.website + '/' + this.state.currentPdf} style={{width: "98%", height: "100%", border: "none"}}/>
-                        </Col>
-                    </Row>
-                // </Container>
+                <Row>
+                    <Col lg={2}>
+                        <Form>
+                            <Form.Control size="lg" type="text" placeholder="Pdf name" onChange={this.search} />
+                        </Form>
+                        <ListGroup style={{height: "550px", overflowY: "scroll"}}>
+                            {this.state.displayPdfs.map((pdf, index) => {
+                                return(
+                                    <ListGroup.Item
+                                        action
+                                        key={pdf}
+                                        variant="light"
+                                        style={{
+                                            textAlign: "center",
+                                            cursor: "pointer"
+                                        }}
+                                        onClick={this.changePdf}
+                                        value={pdf.filename}
+                                    >{pdf.filename}</ListGroup.Item>
+                                );
+                            })}
+                        </ListGroup>
+                    </Col>
+                    <Col lg={10}>
+                        <iframe title={this.state.currentPdf} src={path + "/pdf/" + this.props.brand + '/' + this.state.currentPdf} style={{width: "100%", height: "100%", border: "none"}}/>
+                    </Col>
+                </Row>
             )
         } else if (this.state.doneLoading && !this.state.pdfs) {
             return(

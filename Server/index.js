@@ -57,7 +57,7 @@ app.post('/api', (req, res) => {
     dbManager.dbFindUserByBrand(req.body.brand)
         .then(user => {
             if (user.apiKey != req.body.apiKey) {
-                res.status(400).send({succes: false, error: {message: "Wrong Api Key"}});
+                res.status(400).send({success: false, error: {message: "Wrong Api Key"}});
                 return;
             }
             switch(req.body.type) {
@@ -121,10 +121,10 @@ app.post('/api/users/register', (req, res) => {
     dbManager.dbRegisterUser(req.body)
         .then(registerStatus => {
             if (registerStatus) {
-                console.log(req.body);
+                // console.log(req.body);
                 if (!fs.existsSync(path.resolve(__dirname, `pdf/${req.body.brand}`))) {
                     fs.mkdirSync(path.resolve(__dirname, `pdf/${req.body.brand}`));
-                    console.log(`pdf/${req.body.brand} has been created`);
+                    // console.log(`pdf/${req.body.brand} has been created`);
                 }
                 res.sendStatus(200);
             } else {
@@ -185,12 +185,42 @@ app.post("/api/pdfs/print", (req, res) => {
     res.sendStatus(200);
 })
 
+app.post("/api/users", (req, res) => {
+    if (typeof req.body.brand == "undefined" || typeof req.body.apiKey == "undefined") {
+        res.status(404).send({success: false, error: {message: "Could not be identified"}});
+        return;
+    }
+    dbManager.dbFindUserByArgs({
+        brand: req.body.brand,
+        apiKey: req.body.apiKey,
+        privileges: "admin"
+    })
+        .then(
+            dbManager.dbFindMany("users", {}, ["email", "apiKey", "brand", "privileges"])
+                .then(users => {
+                    if (users) {
+                        // console.log(users);
+                        res.status(200).send({success: true, users: users});
+                        return;
+                    } else {
+                        res.status(404).send({success: false, error: {message: "Could not find any users"}});
+                        return;
+                    }
+                })
+                .catch(err => {
+                    res.status(400).send({success: false, error: {message: err}});
+                })
+        )
+        .catch(err => {
+            res.status(400).send({success: false, error: {message: err}});
+        })
+})
+
 // Get all pdfs of a brand
 app.get("/api/pdfs/:brand", (req, res) => {
     dbManager.dbfindPdfsByBrand(req.params.brand)
         .then(pdfs => {
             if (pdfs) {
-                // console.log(pdfs);
                 res.status(200).send({success: true, pdfs: pdfs});
                 return;
             } else {
@@ -200,20 +230,6 @@ app.get("/api/pdfs/:brand", (req, res) => {
         .catch(err => {
             res.status(400).send({success: false, error: {message: err}});
         })
-    // if (typeof req.params.brand != "undefined") {
-    //     const folder = `./pdf/${req.params.brand}`;
-    //     var files = [];
-    //     if (!fs.existsSync(`pdf/${req.params.brand}`)) {
-    //         res.status(401).send({"message": "No pdf files found (brand not exists in system)"});
-    //         return;
-    //     }
-    //     fs.readdirSync(folder).forEach(file => {
-    //         files.push(file);
-    //     })
-    //     res.status(200).send({"message": JSON.stringify(files)});
-    // } else {
-    //     res.status(401).send({"message": "Please provide a brand"});
-    // }
 });
 
 function validateCredentials(req, res, shouldCheckBrand=false) {
