@@ -30,14 +30,16 @@ class Header extends React.Component {
     }
 
     logout() {
-        console.log("Logout");
-        cookie.remove("brand");
-        cookie.remove("validationKey");
+        // console.log("Logout");
+        cookie.remove("brand", { path: '/' });
+        cookie.remove("validationKey", { path: '/' });
         console.log(cookie.get("brand"));
-        this.setState({
-            isLoggedIn: false
-        });
-        // window.location.replace(window.location.protocol + '//' + window.location.host);
+        if (cookie.get("brand") === "undefined") {
+            this.setState({
+                isLoggedIn: false
+            });
+        }
+        window.location.replace(window.location.protocol + '//' + window.location.host);
     }
 
     validateUser() {
@@ -95,7 +97,7 @@ class Header extends React.Component {
                             <NavDropdown.Item href="/dashboard/my-account">Manage Account</NavDropdown.Item>
                             <NavDropdown.Item href="/dashboard/mypdfs">MyPdfs</NavDropdown.Item>
                         </NavDropdown>
-                        <Nav.Link href="/logout">Logout</Nav.Link>
+                        <Nav.Link onClick={this.logout}>Logout</Nav.Link>
                     </Nav>
                     )}
                 </Navbar.Collapse>

@@ -6,7 +6,7 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import './index.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-import Header from './Components/FrontHeader';
+import Header from './Components/Header';
 import Home from './Components/Home';
 import Login from './Components/Login';
 import Register from './Components/Register';
