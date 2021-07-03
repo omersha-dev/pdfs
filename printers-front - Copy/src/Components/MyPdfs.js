@@ -1,8 +1,9 @@
 import React from "react";
 import axios from "axios";
-import { Row, Col, Form, ListGroup } from "react-bootstrap";
+import { Container, Row, Col, Form, ListGroup, Pagination } from "react-bootstrap";
 
 const path = window.location.protocol + '//' + window.location.host.replace(":3000", "");
+const perPage = 8;
 
 class MyPdfs extends React.Component {
     constructor(props) {
@@ -10,10 +11,50 @@ class MyPdfs extends React.Component {
         this.state = {
             doneLoading: false,
             pdfs: null,
-            displayPdfs: null,
-            currentPdf: null
+            pagination: [],
+            page: 1
         }
+        this.changePage = this.changePage.bind(this);
         this.getPdfs();
+    }
+
+    setPagination() {
+        if (!this.state.pdfs) {
+            return;
+        }
+        var pagesCount = Math.ceil(this.state.pdfs.length / perPage);
+        var tempPagination = [];
+        for (var i = pagesCount - 2; i <= pagesCount + 2; i++) {
+            if (i < 0) {
+                i = 0;
+                continue;
+            } else if (i === 0) {
+                continue;
+            }
+            if (pagesCount < 3 && i === pagesCount + 1) {
+                break;
+            }
+            tempPagination.push(
+                <Pagination.Item key={i} pagenum={i} active={i === this.state.page} onClick={this.changePage} style={{cursor: "pointer"}} >
+                    {i}
+                </Pagination.Item>,
+            );
+        }
+        this.setState({
+            pagination: tempPagination
+        });
+    }
+
+    changePage(e) {
+        var clickedPage = e.currentTarget.getAttribute("pagenum");
+        if (clickedPage == this.state.page) {
+            return;
+        }
+        var currentActive = document.querySelector(".page-item.active")
+        currentActive.classList.remove("active");
+        // currentActive.children[0].tagName = "a";
+        e.currentTarget.closest(".page-item").classList.add("active");
+        this.setState({page: clickedPage});
     }
 
     getPdfs() {
@@ -32,70 +73,61 @@ class MyPdfs extends React.Component {
                 var pdfs = response.data.pdfs.reverse();
                 this.setState({
                     doneLoading: true,
-                    pdfs: pdfs,
-                    displayPdfs: pdfs,
-                    currentPdf: pdfs["0"].filename
+                    pdfs: pdfs
                 });
+                this.setPagination();
             })
             .catch((error) => {
                 console.log(error);
             });
-
-        this.search = this.search.bind(this);
-        this.changePdf = this.changePdf.bind(this);
-    }
-
-    search(e) {
-        var searchQuery = e.target.value;
-        if (this.state.pdfs) {
-            var pdfs = [];
-            for (const [key, value] of Object.entries(this.state.pdfs)) {
-                // console.log(value);
-                if (value["filename"].includes(searchQuery)) {
-                    pdfs.push(value);
-                }
-            }
-            this.setState({displayPdfs: pdfs});
-        }
-    }
-
-    changePdf(e) {
-        this.setState({currentPdf: e.target.value});
     }
 
     render() {
-        this.getPdfs();
         if (this.state.doneLoading && this.state.pdfs) {
             return(
-                <Row>
-                    <Col lg={2}>
-                        <Form>
-                            <Form.Control size="lg" type="text" placeholder="Pdf name" onChange={this.search} />
-                        </Form>
-                        <ListGroup style={{height: "550px", overflowY: "scroll"}}>
-                            {this.state.displayPdfs.map((pdf, index) => {
+                <Container fluid>
+                    <Row>
+                        <Col>
+                            {this.state.pdfs.slice(perPage * (this.state.page - 1), perPage * this.state.page).map((pdf, index) => {
                                 return(
-                                    <ListGroup.Item
-                                        action
-                                        key={pdf}
-                                        variant="light"
-                                        style={{
-                                            textAlign: "center",
-                                            cursor: "pointer"
-                                        }}
-                                        onClick={this.changePdf}
-                                        value={pdf.filename}
-                                    >{pdf.filename}</ListGroup.Item>
-                                );
+                                    <iframe title={this.state.pdf} src={path + "/pdf/" + this.props.brand + '/' + pdf.filename} />
+                                )
                             })}
-                        </ListGroup>
-                    </Col>
-                    <Col lg={10}>
-                        <iframe title={this.state.currentPdf} src={path + "/pdf/" + this.props.brand + '/' + this.state.currentPdf} style={{width: "100%", height: "100%", border: "none"}}/>
-                    </Col>
-                </Row>
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col>
+                            <Pagination>
+                                <Pagination.First />
+                                <Pagination.Prev />
+                                {this.state.pdfs.length % perPage > 1 ? (
+                                    <>
+                                        {this.state.page > 3 ? (
+                                            <Pagination.Ellipsis />
+                                        ) : (
+                                            <></>
+                                        )}
+                                        {this.state.pagination ? (
+                                            this.state.pagination
+                                        ) : (
+                                            <></>
+                                        )}
+                                        {this.state.page < Math.floor(this.state.pdfs.length / perPage) ? (
+                                            <Pagination.Ellipsis />
+                                        ) : (
+                                            <></>
+                                        )}
+                                    </>
+                                ) : (
+                                <></>
+                                )}
+                            </Pagination>
+                        </Col>
+                    </Row>
+                </Container>
             )
         } else if (this.state.doneLoading && !this.state.pdfs) {
+            this.getPdfs();
             return(
                 <p>No pdf's found</p>
             );
