@@ -2,6 +2,8 @@ import React from "react";
 import axios from "axios";
 import { Row, Col, Form, ListGroup } from "react-bootstrap";
 
+const path = window.location.protocol + '//' + window.location.host.replace(":3000", "");
+
 class MyPdfs extends React.Component {
     constructor(props) {
         super(props);
@@ -14,7 +16,7 @@ class MyPdfs extends React.Component {
         var self = this;
         var config = {
             method: 'get',
-            url: `/api/pdfs/${this.props.website}`,
+            url: `${path}/api/pdfs/${this.props.website}`,
             headers: { }
         };
         

@@ -5,6 +5,7 @@ import { Container, InputGroup, FormControl, Row, Col, Jumbotron } from 'react-b
 import Cookie from "universal-cookie";
 
 const cookie = new Cookie();
+const path = window.location.protocol + '//' + window.location.host.replace(":3000", "");
 
 class Account extends React.Component {
     constructor(props) {
@@ -25,7 +26,7 @@ class Account extends React.Component {
     getUserDetails() {
         var config = {
             method: "POST",
-            url: `/api/users/${cookie.get("website")}`,
+            url: `${path}/api/users/${cookie.get("brand")}`,
             headers: { },
         }
 

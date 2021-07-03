@@ -17,14 +17,14 @@ class WebsocketManager {
                 var m = JSON.parse(message);
                 switch (m.type) {
                     case ("config"):
-                        if (!fs.existsSync(`pdf/${m.data.website}`)) {
-                            fs.mkdirSync(`pdf/${m.data.website}`);
+                        if (!fs.existsSync(`pdf/${m.data.brand}`)) {
+                            fs.mkdirSync(`pdf/${m.data.brand}`);
                         }
-                        eventManager.eventEmitter.on(m.data.website, (pdfFilename) => {
-                            logManager.log(`New connection received from ${m.data.website}`);
+                        eventManager.eventEmitter.on(m.data.brand, (pdfFilename) => {
+                            logManager.log(`New connection received from ${m.data.brand}`);
                             ws.send(pdfFilename);
                         });
-                        var unsentJobs = logManager.getAllOrdersByWebsite(m.data.website);
+                        var unsentJobs = logManager.getAllOrdersBybrand(m.data.brand);
                         if (typeof unsentJobs != "undefined") {
                             unsentJobs.forEach(unsentJob => {
                                 ws.send(`${unsentJob}.pdf`);
@@ -32,21 +32,21 @@ class WebsocketManager {
                         }
                         break;
                     case ("ps"):
-                        logManager.removeFromQueue(m.data.website, m.data.filename);
-                        logManager.log(`${m.data.filename} from ${m.data.website} has been successfuly printed`);
-                        dbManager.dbLogPdfPrint({filename: m.data.website, website: m.data.website});
+                        logManager.removeFromQueue(m.data.brand, m.data.filename);
+                        logManager.log(`${m.data.filename} from ${m.data.brand} has been successfuly printed`);
+                        dbManager.dbLogPdfPrint({filename: m.data.brand, brand: m.data.brand});
                         console.log(m.data);
                         break;
                     case ("pe"):
-                        logManager.log(`An error occured while trying to print ${m.data.filename} from ${m.data.website}`)
+                        logManager.log(`An error occured while trying to print ${m.data.filename} from ${m.data.brand}`)
                         console.log(m.data);
                         break;
                     case ("dfs"):
-                        logManager.log(`${m.data.filename} from ${m.data.website} has been successfuly deleted`);
+                        logManager.log(`${m.data.filename} from ${m.data.brand} has been successfuly deleted`);
                         console.log(m.data);
                         break;
                     case ("dff"):
-                        logManager.log(`An error occured while trying to delete ${m.data.filename} from ${m.data.website}`)
+                        logManager.log(`An error occured while trying to delete ${m.data.filename} from ${m.data.brand}`)
                         console.log(m.data);
                         break;
                 }

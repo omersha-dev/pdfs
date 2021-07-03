@@ -99,9 +99,9 @@ class PrivateDbManager {
         });
     }
 
-    dbfindPdfsByWebsite(website) {
+    dbfindPdfsByBrand(brand) {
         return new Promise((resolve, reject) => {
-            this.dbFindMany("pdfs", {website: website}, {_id: 0, filename: 1, createdTime: 1, printTime: 1})
+            this.dbFindMany("pdfs", {brand: brand}, {_id: 0, filename: 1, createdTime: 1, printTime: 1})
                 .then(res => {
                     resolve(res);
                 })
@@ -112,9 +112,9 @@ class PrivateDbManager {
         });
     }
 
-    dbFindUserByWebsite(website) {
+    dbFindUserByBrand(brand) {
         return new Promise((resolve, reject) => {
-            this.dbFindUser(this.buildFilter({website: website}))
+            this.dbFindUser(this.buildFilter({brand: brand}))
                 .then(res => {
                     resolve(res);
                 })
@@ -127,7 +127,7 @@ class PrivateDbManager {
 
     dbRegisterUser(args) {
         return new Promise((resolve, reject) => {
-            this.dbFindUser(this.buildFilter({email: args.email, website: args.website}, "or"))
+            this.dbFindUser(this.buildFilter({email: args.email, brand: args.brand}, "or"))
                 .then(res => {
                     if (!res) {
                         this.dbInsertOne("users", args);

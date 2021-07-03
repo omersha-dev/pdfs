@@ -19,33 +19,33 @@ class PrivateLogManager {
         }
     }
 
-    getAllOrdersByWebsite(website) {
-        return this.unsentPdfs[website];
+    getAllOrdersByBrand(brand) {
+        return this.unsentPdfs[brand];
     }
 
     // Logs the order.
-    logPdf(dataFromWebsite) {
+    logPdf(dataFromBrand) {
         var filename;
-        if (dataFromWebsite.type == "order") {
-            filename = dataFromWebsite.orderData.orderID;
-        } else if (dataFromWebsite.type == "html") {
-            filename = dataFromWebsite.data.filename;
+        if (dataFromBrand.type == "order") {
+            filename = dataFromBrand.orderData.orderID;
+        } else if (dataFromBrand.type == "html") {
+            filename = dataFromBrand.data.filename;
         }
-        if (dataFromWebsite.website in this.unsentPdfs && !this.unsentPdfs[dataFromWebsite.website].includes(filename)) {
-            this.unsentPdfs[dataFromWebsite.website].push(filename);
+        if (dataFromBrand.brand in this.unsentPdfs && !this.unsentPdfs[dataFromBrand.brand].includes(filename)) {
+            this.unsentPdfs[dataFromBrand.brand].push(filename);
         } else {
-            this.unsentPdfs[dataFromWebsite.website] = [filename];
+            this.unsentPdfs[dataFromBrand.brand] = [filename];
         }
         fs.writeFileSync(this.filename, JSON.stringify(this.unsentPdfs));
         this.log(`${filename} has been added to pdfjobs.json`);
     }
 
     // Remove an order from the json file.
-    removeFromQueue(website, filename) {
+    removeFromQueue(brand, filename) {
         filename = filename.replace(".pdf", "");
-        var index = this.unsentPdfs[website].indexOf(filename);
+        var index = this.unsentPdfs[brand].indexOf(filename);
         if (index >= 0) {
-            this.unsentPdfs[website].splice(index, 1);
+            this.unsentPdfs[brand].splice(index, 1);
             this.log(`${filename} has been removed from pdfjobs.json`);
         }
         fs.writeFileSync(this.filename, JSON.stringify(this.unsentPdfs));
@@ -58,8 +58,8 @@ class PrivateLogManager {
     }
 
     // Returns TRUE if the order is in unsent orders
-    isUnset(orderID, website) {
-        return this.unsentPdfs[website].includes(orderID) ? true : false;
+    isUnset(orderID, brand) {
+        return this.unsentPdfs[brand].includes(orderID) ? true : false;
     }
 
 }

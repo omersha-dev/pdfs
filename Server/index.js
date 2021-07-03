@@ -54,7 +54,7 @@ app.get('/api', (req, res) => {
 })
 
 app.post('/api', (req, res) => {
-    dbManager.dbFindUserByWebsite(req.body.website)
+    dbManager.dbFindUserByBrand(req.body.brand)
         .then(user => {
             if (user.apiKey != req.body.apiKey) {
                 res.status(400).send({succes: false, error: {message: "Wrong Api Key"}});
@@ -62,17 +62,17 @@ app.post('/api', (req, res) => {
             }
             switch(req.body.type) {
                 case ("order"):
-                    logManager.log(`Received order #${req.body.orderData.orderID} from ${req.body.website}`)
-                    if (logManager.isUnset(req.body.orderData.orderID, req.body.website)) {
+                    logManager.log(`Received order #${req.body.orderData.orderID} from ${req.body.brand}`)
+                    if (logManager.isUnset(req.body.orderData.orderID, req.body.brand)) {
                         console.log("Is unsent");
                     } else {
                         console.log("Is not unsent");
                     }
                     logManager.logPdf(req.body);
                     pdfManager.initPdf(req.body);
-                    var eventName = req.body.website;
+                    var eventName = req.body.brand;
                     logManager.log(`Emitting event ${eventName}`);
-                    eventManager.eventEmitter.emit(req.body.website, `${req.body.website}_${req.body.orderData.orderID}.pdf`);
+                    eventManager.eventEmitter.emit(req.body.brand, `${req.body.brand}_${req.body.orderData.orderID}.pdf`);
                     res.sendStatus(200);
                     break;
                 case ("html"):
@@ -81,21 +81,21 @@ app.post('/api', (req, res) => {
                             res.status(404).send({success: false, error: {message: "Please provide pdf filename"}});
                             return;
                         }
-                        if (typeof req.body.website == "undefined") {
-                            res.status(404).send({success: false, error: {message: "Please provide the website the pdf is belong to"}});
+                        if (typeof req.body.brand == "undefined") {
+                            res.status(404).send({success: false, error: {message: "Please provide the brand the pdf is belong to"}});
                             return;
                         }
                         logManager.log(`Recieved file ${req.body.data.filename}.pdf from ${req.body.webiste}`);
-                        dbManager.dbInsertPdf({filename: `${req.body.data.filename}.pdf`, website: req.body.website})
+                        dbManager.dbInsertPdf({filename: `${req.body.data.filename}.pdf`, brand: req.body.brand})
                         .then(insertStatus => {
                             if (insertStatus) {
                                     logManager.logPdf(req.body);
-                                    var eventName = req.body.website;
+                                    var eventName = req.body.brand;
                                     logManager.log(`Emitting event ${eventName}`);
-                                    eventManager.eventEmitter.emit(req.body.website, `${req.body.data.filename}.pdf`);
+                                    eventManager.eventEmitter.emit(req.body.brand, `${req.body.data.filename}.pdf`);
                                     res.sendStatus(200);
                                 } else {
-                                    logManager.log(`File ${req.body.data.filename}.pdf already exists in ${req.body.website}`);
+                                    logManager.log(`File ${req.body.data.filename}.pdf already exists in ${req.body.brand}`);
                                     res.status(400).send({success: false, error: {message: "There is already a pdf file with this name"}});
                                 }
                             })
@@ -122,13 +122,13 @@ app.post('/api/users/register', (req, res) => {
         .then(registerStatus => {
             if (registerStatus) {
                 console.log(req.body);
-                if (!fs.existsSync(path.resolve(__dirname, `pdf/${req.body.website}`))) {
-                    fs.mkdirSync(path.resolve(__dirname, `pdf/${req.body.website}`));
-                    console.log(`pdf/${req.body.website} has been created`);
+                if (!fs.existsSync(path.resolve(__dirname, `pdf/${req.body.brand}`))) {
+                    fs.mkdirSync(path.resolve(__dirname, `pdf/${req.body.brand}`));
+                    console.log(`pdf/${req.body.brand} has been created`);
                 }
                 res.sendStatus(200);
             } else {
-                res.status(404).send({success: false, error: {message: "This email or website already exists"}});
+                res.status(404).send({success: false, error: {message: "This email or brand already exists"}});
             }
         })
         .catch(err => {
@@ -153,18 +153,18 @@ app.post('/api/users/login', (req, res) => {
 });
 
 // Get user details
-app.post('/api/users/:website', (req, res) => {
-    if (typeof req.params.website === "undefined") {
-        res.status(400).send({success: false, error: {message: "Please provide website"}})
+app.post('/api/users/:brand', (req, res) => {
+    if (typeof req.params.brand === "undefined") {
+        res.status(400).send({success: false, error: {message: "Please provide brand"}})
         return;
     }
-    dbManager.dbFindUserByWebsite(req.params.website)
+    dbManager.dbFindUserByBrand(req.params.brand)
         .then(user => {
             if (user) {
                 res.status(200).send({success: true, message:{user: user}});
                 return;
             } else {
-                res.status(404).send({success: false, error: {message: "Could not find a user for this website"}});
+                res.status(404).send({success: false, error: {message: "Could not find a user for this brand"}});
             }
         })
         .catch(err => {
@@ -177,34 +177,34 @@ app.post("/api/pdfs/print", (req, res) => {
         res.status(404).send({success: false, error: {message: "Please provide pdf filename"}});
         return;
     }
-    if (typeof req.body.website == "undefined") {
-        res.status(404).send({success: false, error: {message: "Please provide the website the pdf is belong to"}});
+    if (typeof req.body.brand == "undefined") {
+        res.status(404).send({success: false, error: {message: "Please provide the brand the pdf is belong to"}});
         return;
     }
     dbManager.dbLogPdfPrint(req.body);
     res.sendStatus(200);
 })
 
-// Get all pdfs of a website
-app.get("/api/pdfs/:website", (req, res) => {
-    dbManager.dbfindPdfsByWebsite(req.params.website)
+// Get all pdfs of a brand
+app.get("/api/pdfs/:brand", (req, res) => {
+    dbManager.dbfindPdfsByBrand(req.params.brand)
         .then(pdfs => {
             if (pdfs) {
                 // console.log(pdfs);
                 res.status(200).send({success: true, pdfs: pdfs});
                 return;
             } else {
-                res.status(404).send({success: false, error: {message: "Could not find any pdfs for this website"}});
+                res.status(404).send({success: false, error: {message: "Could not find any pdfs for this brand"}});
             }
         })
         .catch(err => {
             res.status(400).send({success: false, error: {message: err}});
         })
-    // if (typeof req.params.website != "undefined") {
-    //     const folder = `./pdf/${req.params.website}`;
+    // if (typeof req.params.brand != "undefined") {
+    //     const folder = `./pdf/${req.params.brand}`;
     //     var files = [];
-    //     if (!fs.existsSync(`pdf/${req.params.website}`)) {
-    //         res.status(401).send({"message": "No pdf files found (website not exists in system)"});
+    //     if (!fs.existsSync(`pdf/${req.params.brand}`)) {
+    //         res.status(401).send({"message": "No pdf files found (brand not exists in system)"});
     //         return;
     //     }
     //     fs.readdirSync(folder).forEach(file => {
@@ -212,11 +212,11 @@ app.get("/api/pdfs/:website", (req, res) => {
     //     })
     //     res.status(200).send({"message": JSON.stringify(files)});
     // } else {
-    //     res.status(401).send({"message": "Please provide a website"});
+    //     res.status(401).send({"message": "Please provide a brand"});
     // }
 });
 
-function validateCredentials(req, res, shouldCheckWebsite=false) {
+function validateCredentials(req, res, shouldCheckBrand=false) {
     if (typeof req.body.email == "undefined") {
         res.status(404).send({success: false, error: {message: "Please provide email"}});
         return;
@@ -225,9 +225,9 @@ function validateCredentials(req, res, shouldCheckWebsite=false) {
         res.status(404).send({success: false, error: {message: "Please provide password"}});
         return;
     }
-    if (shouldCheckWebsite) {
-        if (typeof req.body.website == "undefined") {
-            res.status(404).send({success: false, error: {message: "Please provide website"}});
+    if (shouldCheckBrand) {
+        if (typeof req.body.brand == "undefined") {
+            res.status(404).send({success: false, error: {message: "Please provide brand"}});
             return;
         }
     }

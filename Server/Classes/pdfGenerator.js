@@ -17,18 +17,18 @@ class PdfManager {
             } else {
                 file = { content: htmlData.data.html };
             }
-            // if (!fs.existsSync(`/var/app/pdfs/Server/pdf/${htmlData.website}`)) {
-            //     fs.mkdirSync(`/var/app/pdfs/Server/pdf/${htmlData.website}`);
-            //     console.log(`/var/app/pdfs/Server/pdf/${htmlData.website} has been created`);
+            // if (!fs.existsSync(`/var/app/pdfs/Server/pdf/${htmlData.brand}`)) {
+            //     fs.mkdirSync(`/var/app/pdfs/Server/pdf/${htmlData.brand}`);
+            //     console.log(`/var/app/pdfs/Server/pdf/${htmlData.brand} has been created`);
             // }
             // console.log("Continued");
-            console.log(`pdf/${htmlData.website}/${htmlData.data.filename}.pdf`);
+            console.log(`pdf/${htmlData.brand}/${htmlData.data.filename}.pdf`);
             html2pdf.generatePdf(file, options)
                 .then(pdfBuffer => {
-                    if ( !fs.existsSync(`pdf/${htmlData.website}`) ) {
-                        fs.mkdir(`pdf/${htmlData.website}`, {recursive: true}, err => {})
+                    if ( !fs.existsSync(`pdf/${htmlData.brand}`) ) {
+                        fs.mkdir(`pdf/${htmlData.brand}`, {recursive: true}, err => {})
                     }
-                    fs.writeFileSync(path.resolve(__dirname, `../pdf/${htmlData.website}/${htmlData.data.filename}.pdf`), pdfBuffer, {encoding: "binary", flag: 'w'});
+                    fs.writeFileSync(path.resolve(__dirname, `../pdf/${htmlData.brand}/${htmlData.data.filename}.pdf`), pdfBuffer, {encoding: "binary", flag: 'w'});
                     console.log("done");
                     callback();
                 })
@@ -109,7 +109,7 @@ class PdfManager {
     
         // Stream contents to a file
         pdf.pipe(
-            fs.createWriteStream(`${data.website}_${data.orderData.orderID}.pdf`)
+            fs.createWriteStream(`${data.brand}_${data.orderData.orderID}.pdf`)
         )
         .on("finish", () => {
             console.log("PDF Closed");

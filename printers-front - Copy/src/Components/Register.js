@@ -24,11 +24,15 @@ export default function Register() {
     
     const onRegister = () => {
 
+        var validationKey = md5(document.getElementById("register_band") + document.getElementById("register_password").value); 
+        
         var data = {
             email: document.getElementById("register_email").value,
             password: md5(document.getElementById("register_password").value),
-            website: document.getElementById("register_website").value.replace("http://", "").replace("https://", "").replace("www.", ""),
-            apiKey: generateApiKey()
+            apiKey: generateApiKey(),
+            brand: document.getElementById("register_brand").value,
+            validationKey: validationKey,
+            privileges: "customer"
         }
 
         var confirmPassword = md5(document.getElementById("confirm_register_password").value);
@@ -40,9 +44,11 @@ export default function Register() {
 
         var config = {
             method: "POST",
-            url: '/api/users/register',
-            // url: 'http://18.156.5.104/api/users/register',
-            headers: { },
+            url: 'http://localhost/api/users/register',
+            // url: 'http://localhost/api/users/register',
+            headers: {
+                'Content-Type': 'application/json'
+            },
             data : data
         };
 
@@ -52,17 +58,22 @@ export default function Register() {
                 console.log(JSON.stringify(response.data));
             })
             .catch((err) => {
-                setErrorMsg(err.response.data.error.message);
-                console.log(err.response.data.error.message);
+                // setErrorMsg(err.response.data.error.message);
+                // console.log(err.response.data.error.message);
+                console.log(err);
             })
     }
 
     return (
-        <Container style={{height: "100vh"}}>
-            <Row style={{height: "100vh"}}>
-                <Col className="d-flex justify-content-center align-items-center" style={{height: "100vh"}}>
+        <Container style={{height: "94vh"}}>
+            <Row style={{height: "94vh"}}>
+                <Col className="d-flex justify-content-center align-items-center flex-column" style={{height: "94vh"}}>
+                    <h2>
+                        PDFeast
+                    </h2>
+                    <h4>It's nice to meet you</h4>
                     <Card>
-                        <Card.Header className="text-center">Register</Card.Header>
+                        {/* <Card.Header className="text-center">Register</Card.Header> */}
                         <Card.Body>
                             <p style={{color: "red"}}>{errorMsg}</p>
                             <Form onSubmit={handleSubmit(onRegister)}>
@@ -71,21 +82,25 @@ export default function Register() {
                             </Form.Group>
                             <Form.Group>
                                 <InputGroup>
-                                    <InputGroup.Prepend>
+                                    {/* <InputGroup.Prepend> */}
                                         <Form.Control id="register_password" name="register_password" type="password" placeholder="Password" required/>
-                                        <Form.Control id="confirm_register_password" name="confirm_register_password" type="password" placeholder="Confirm password" required/>
-                                    </InputGroup.Prepend>
+                                    {/* </InputGroup.Prepend> */}
                                 </InputGroup>
                             </Form.Group>
                             <Form.Group>
                                 <InputGroup>
-                                    <Form.Control id="register_website" name="register_website" type="text" placeholder="Website" required/>
-                                    <InputGroup.Append>
-                                        <InputGroup.Text>example.com</InputGroup.Text>
-                                    </InputGroup.Append>
+                                    <Form.Control id="confirm_register_password" name="confirm_register_password" type="password" placeholder="Confirm password" required/>
                                 </InputGroup>
                             </Form.Group>
-                            <Button type="submit" value="register">
+                            <Form.Group>
+                                <InputGroup>
+                                    <Form.Control id="register_brand" name="register_brand" type="text" placeholder="brand" required/>
+                                    {/* <InputGroup.Append>
+                                        <InputGroup.Text>example.com</InputGroup.Text>
+                                    </InputGroup.Append> */}
+                                </InputGroup>
+                            </Form.Group>
+                            <Button type="submit" value="register" style={{width: "100%"}}>
                                 Register
                             </Button>
                             </Form>
