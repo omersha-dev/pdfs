@@ -100,7 +100,7 @@ class App extends React.Component {
                             <Route path="/updates" component={Home} />
                             <Route path="/contact-us" component={Home} />
                             <Route path="/dashboard" >
-                                <Dashboard brand={this.state.currentUser ? this.state.currentUser.brand : null} />
+                                <Dashboard user={this.state.currentUser ? this.state.currentUser : null} />
                             </Route>
                         </Switch>
                     </main>

@@ -21,7 +21,6 @@ class Dashboard extends React.Component {
     
     constructor(props) {
 
-        
         super(props);
         this.state = {
             pdfs: null,
@@ -52,11 +51,12 @@ class Dashboard extends React.Component {
             var pdfs = response.data.pdfs;
             self.setState({pdfs: pdfs});
             self.pdfByDates();
-            self.printByDates();
+            // self.printByDates();
         })
         .catch(function (error) {
             console.log(error);
         });
+
     }
 
     validateUser() {
@@ -109,7 +109,7 @@ class Dashboard extends React.Component {
         var today = moment();
         // Run through all the pdfs creation date and push it into the right `pdfsByDates` key (today, lastWeek or lastMonth)
         // Also, increment the total pdfs count
-        for (const [key, value] of Object.entries(this.state.pdfs)) {
+        for (const value of Object.values(this.state.pdfs)) {
             pdfsByDates.total.push(value);
             var pdfDate = moment(value["createdTime"]);
             var gap = today.diff(pdfDate, "days");
@@ -126,42 +126,43 @@ class Dashboard extends React.Component {
         this.setState({pdfsByDates: pdfsByDates});
     }
 
-    printByDates() {
-        if (!this.state.pdfs) {
-            return null;
-        }
+    // printByDates() {
+    //     if (!this.state.pdfs) {
+    //         return null;
+    //     }
 
-        var printByDates = {
-            total: [],
-            today: [],
-            lastWeek: [],
-            lastMonth: []
-        };
-        var today = moment();
-        for (const [value] of Object.entries(this.state.pdfs)) {
-            if (!value["printTime"]) {
-                continue;
-            }
+    //     var printByDates = {
+    //         total: [],
+    //         today: [],
+    //         lastWeek: [],
+    //         lastMonth: []
+    //     };
+    //     var today = moment();
+    //     for (const [value] of Object.entries(this.state.pdfs)) {
+    //         if (!value["printTime"]) {
+    //             continue;
+    //         }
 
-            printByDates.total.push(value);
-            var pdfDate = moment(value["printTime"]);
-            var gap = today.diff(pdfDate, "days");
-            console.log(value["createdTime"] + " | Gap = " + gap);
-            if (gap === 0) {
-                printByDates.today.push(value);
-            }
-            if (gap >= 0 && gap <= 7) {
-                printByDates.lastWeek.push(value);
-            }
-            if (gap >= 0 && gap <= 30) {
-                printByDates.lastMonth.push(value);
-            }
-        };
-        this.setState({printByDates: printByDates});
-    }
+    //         printByDates.total.push(value);
+    //         var pdfDate = moment(value["printTime"]);
+    //         var gap = today.diff(pdfDate, "days");
+    //         console.log(value["createdTime"] + " | Gap = " + gap);
+    //         if (gap === 0) {
+    //             printByDates.today.push(value);
+    //         }
+    //         if (gap >= 0 && gap <= 7) {
+    //             printByDates.lastWeek.push(value);
+    //         }
+    //         if (gap >= 0 && gap <= 30) {
+    //             printByDates.lastMonth.push(value);
+    //         }
+    //     };
+    //     this.setState({printByDates: printByDates});
+    // }
     
     // Continue MainView
     render() {
+        // console.log(this.props.user);
         return (
             <Container fluid>
                 <Row>
@@ -176,9 +177,11 @@ class Dashboard extends React.Component {
                                     <>
                                         <Route path={`${url}/`} component={Statistics} exact />
                                         <Route path={`${url}/my-account`} component={Account} />
-                                        <Route path={`${url}/accounts`} component={ManageAccounts} />
+                                        <Route path={`${url}/accounts`} >
+                                            <ManageAccounts user={this.props.user} />
+                                        </Route>
                                         <Route path={`${url}/mypdfs`} >
-                                            <MyPdfs brand={this.props.brand ? this.props.brand : null} />
+                                            <MyPdfs brand={this.props.user ? this.props.user.brand : null} />
                                         </Route>
                                     </>
                                 )}
